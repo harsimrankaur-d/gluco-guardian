@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { logout } from "@/lib/glucosense";
 import { useInView } from "react-intersection-observer";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler } from "chart.js";
@@ -29,6 +30,10 @@ function CountUp({ end, suffix = "", duration = 2000 }: { end: number; suffix?: 
 
 export default function LandingPage() {
   const [demoInputs, setDemoInputs] = useState({ mealTime: '2', insulinDose: '6', sleepHours: '5', activityLevel: 'moderate' });
+
+  useEffect(() => {
+    logout();
+  }, []);
   const [demoResult, setDemoResult] = useState<null | { labels: string[]; data: number[]; predicted: number[] }>(null);
   const demoRef = useRef<HTMLDivElement>(null);
   const [scrolled, setScrolled] = useState(false);
