@@ -5,9 +5,7 @@ import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler } from "chart.js";
 import ParticlesBackground from "@/components/ParticlesBackground";
 import GlassTiltCard from "@/components/GlassTiltCard";
-import GlucoseMeter from "@/components/GlucoseMeter";
 import { Activity, Brain, Zap, Shield, BarChart3, Watch } from "lucide-react";
-
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler);
 
 function CountUp({ end, suffix = "", duration = 2000 }: { end: number; suffix?: string; duration?: number }) {
@@ -85,24 +83,19 @@ export default function LandingPage() {
       {/* Hero */}
       <section className="relative min-h-screen flex items-center overflow-hidden">
         <ParticlesBackground />
-        <div className="max-w-7xl mx-auto px-4 py-20 grid lg:grid-cols-2 gap-12 items-center relative z-10">
-          <div>
-            <p className="font-heading text-primary text-xs tracking-[0.3em] uppercase mb-4 animate-fade-slide-up">Predict · Protect · Prevail</p>
-            <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-6">
-              Your body knows <span className="text-primary text-glow">before you do.</span>
-            </h1>
-            <p className="text-foreground/60 font-body text-lg mb-8 max-w-xl">
-              GlucoSense uses AI to predict hypoglycaemic episodes up to 60 minutes before they happen — by analysing your medication schedule, meal timing, sleep patterns, and daily lifestyle context.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link to="/auth" className="btn-primary-glow px-8 py-3 rounded-xl text-sm inline-block">Get Started — Free</Link>
-              <button onClick={() => demoRef.current?.scrollIntoView({ behavior: 'smooth' })} className="btn-outline-glow px-8 py-3 rounded-xl text-sm">See a Live Demo</button>
-            </div>
-          </div>
-          <div className="flex justify-center">
-            <GlucoseMeter />
-          </div>
-        </div>
+      <div className="max-w-4xl mx-auto px-4 py-20 flex flex-col items-center text-center relative z-10">
+  <p className="font-heading text-primary text-xs tracking-[0.3em] uppercase mb-4 animate-fade-slide-up">Predict · Protect · Prevail</p>
+  <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold text-foreground leading-tight mb-6">
+    Your body knows <span className="text-primary text-glow">before you do.</span>
+  </h1>
+  <p className="text-foreground/60 font-body text-lg mb-10 max-w-2xl">
+    GlucoSense uses AI to predict hypoglycaemic episodes up to 60 minutes before they happen — by analysing your medication schedule, meal timing, sleep patterns, and daily lifestyle context.
+  </p>
+  <div className="flex flex-wrap gap-4 justify-center">
+    <Link to="/auth" className="btn-primary-glow px-8 py-3 rounded-xl text-sm inline-block">Get Started — Free</Link>
+    <button onClick={() => demoRef.current?.scrollIntoView({ behavior: 'smooth' })} className="btn-outline-glow px-8 py-3 rounded-xl text-sm">See a Live Demo</button>
+  </div>
+</div>
       </section>
 
       {/* Stats */}
