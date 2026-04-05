@@ -11,6 +11,8 @@ export interface UserProfile {
   emergencyContactName?: string;
   alertPreferences?: { sound: boolean; notification: boolean; vibration: boolean };
   aiSensitivity?: 'conservative' | 'balanced' | 'aggressive';
+  heightCm?: number;
+  weightKg?: number;
 }
 
 export interface LogEntry {
@@ -350,6 +352,19 @@ export function getTimelineSummary(logs: LogEntry[]): { mostCommonRiskTime: stri
       else if (h >= 17 && h < 21) hrPeriods.evening++;
       else hrPeriods.night++;
     });
+    export function getBMIData(heightCm: number, weightKg: number): {
+  bmi: number;
+  category: 'underweight' | 'normal' | 'overweight' | 'obese';
+  label: string;
+  color: string;
+} {
+  const bmi = weightKg / Math.pow(heightCm / 100, 2);
+  const rounded = Math.round(bmi * 10) / 10;
+  if (bmi < 18.5) return { bmi: rounded, category: 'underweight', label: 'Underweight', color: '#60A5FA' };
+  if (bmi < 25)   return { bmi: rounded, category: 'normal',      label: 'Normal',      color: '#22C97A' };
+  if (bmi < 30)   return { bmi: rounded, category: 'overweight',  label: 'Overweight',  color: '#F59E42' };
+  return             { bmi: rounded, category: 'obese',       label: 'Obese',       color: '#F25C6E' };
+}
     const topHrPeriod = Object.entries(hrPeriods).sort((a, b) => b[1] - a[1])[0];
     if (topHrPeriod[1] >= 2) {
       pattern = `${topHrPeriod[1]} of your ${highRiskLogs.length} high-risk events occurred in the ${topHrPeriod[0]} — consider a ${topHrPeriod[0]} snack routine.`;
