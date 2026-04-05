@@ -27,7 +27,7 @@ export default function RiskGauge({ score, size = 240 }: Props) {
     return () => cancelAnimationFrame(frame);
   }, [score]);
 
-  const angle = -90 + (animatedScore / 100) * 180;
+  const angle = -180 + (animatedScore / 100) * 180;
   const r = size / 2 - 20;
   const cx = size / 2;
   const cy = size / 2;
