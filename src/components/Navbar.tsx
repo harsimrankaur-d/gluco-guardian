@@ -76,20 +76,82 @@ useEffect(() => {
           )}
 
           <div className="flex items-center gap-3">
-            {session && (
-              <>
-                <button className="relative text-foreground/60 hover:text-foreground transition-colors">
-                  <Bell size={18} />
-                  {latestLog && latestLog.riskScore > 55 && <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-destructive rounded-full animate-pulse" />}
-                </button>
-                <button onClick={() => setSosOpen(true)} className="btn-primary-glow text-xs px-3 py-1.5 rounded-lg flex items-center gap-1" style={{ background: 'hsl(356,82%,56%)', boxShadow: '0 0 15px rgba(230,57,70,0.4)' }}>
-                  🆘 SOS
-                </button>
-                <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center text-xs font-heading text-primary">{initials}</div>
-                <button onClick={handleLogout} className="text-xs text-muted-foreground hover:text-foreground transition-colors hidden md:block">Logout</button>
-                <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden text-foreground/60"><Menu size={20} /></button>
-              </>
-            )}
+  {session ? (
+    <>
+      <button className="relative text-foreground/60 hover:text-foreground transition-colors">
+        <Bell size={18} />
+        {latestLog && latestLog.riskScore > 55 && (
+          <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-destructive rounded-full animate-pulse" />
+        )}
+      </button>
+      <button
+        onClick={() => setSosOpen(true)}
+        className="btn-primary-glow text-xs px-3 py-1.5 rounded-lg flex items-center gap-1"
+        style={{ background: 'hsl(356,82%,56%)', boxShadow: '0 0 15px rgba(230,57,70,0.4)' }}
+      >
+        🆘 SOS
+      </button>
+      <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center text-xs font-heading text-primary">
+        {initials}
+      </div>
+      <button
+        onClick={handleLogout}
+        className="text-xs text-muted-foreground hover:text-foreground transition-colors hidden md:block"
+      >
+        Logout
+      </button>
+      <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden text-foreground/60">
+        <Menu size={20} />
+      </button>
+    </>
+  ) : (
+    <div className="flex items-center gap-2">
+      {/* Login button */}
+      <Link
+        to="/auth"
+        className="flex items-center gap-2 text-xs font-heading uppercase tracking-widest transition-all duration-200 hover:scale-105"
+        style={{
+          padding: '0.5rem 1.1rem',
+          borderRadius: '100px',
+          border: '1.5px solid rgba(0,255,204,0.45)',
+          color: '#00ffcc',
+          background: 'rgba(0,255,204,0.07)',
+          backdropFilter: 'blur(6px)',
+          letterSpacing: '0.12em',
+        }}
+      >
+        {/* user icon */}
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+        </svg>
+        Login
+      </Link>
+
+      {/* Sign Up button */}
+      <Link
+        to="/auth"
+        className="flex items-center gap-2 text-xs font-heading uppercase tracking-widest transition-all duration-200 hover:scale-105 hover:shadow-lg"
+        style={{
+          padding: '0.5rem 1.2rem',
+          borderRadius: '100px',
+          border: 'none',
+          color: '#0a0020',
+          background: 'linear-gradient(135deg, #00ffcc, #a97ff0)',
+          boxShadow: '0 0 18px #00ffcc44',
+          fontWeight: 700,
+          letterSpacing: '0.12em',
+        }}
+      >
+        {/* sparkle icon */}
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" />
+        </svg>
+        Sign Up
+      </Link>
+    </div>
+  )}
+</div>
           </div>
         </div>
 
