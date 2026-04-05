@@ -36,10 +36,10 @@ export default function Dashboard() {
   const insights = latestLog?.insights ?? [];
 
   const metricCards = [
-    { label: 'Last Logged Glucose', value: latestLog?.glucoseReading ? `${latestLog.glucoseReading} mg/dL` : '—', color: '#00F5D4' },
-    { label: 'Current Risk Score', value: `${riskScore}/100`, color: riskScore <= 30 ? '#06D6A0' : riskScore <= 55 ? '#FFB703' : riskScore <= 75 ? '#ff8c00' : '#E63946' },
-    { label: 'Time Since Last Meal', value: latestLog ? getTimeSince(latestLog.lastMealTime) : '—', color: '#FFB703' },
-    { label: 'Insulin Status', value: latestLog ? getInsulinStatus(latestLog.insulinTime) : '—', color: '#00F5D4' },
+    { label: 'Last Logged Glucose', value: latestLog?.glucoseReading ? `${latestLog.glucoseReading} mg/dL` : '—', color: '#00ffcc' },
+    { label: 'Current Risk Score', value: `${riskScore}/100`, color: riskScore <= 30 ? '#00ffcc' : riskScore <= 55 ? '#FFB703' : riskScore <= 75 ? '#ff8c00' : '#E63946' },
+    { label: 'Time Since Last Meal', value: latestLog ? getTimeSince(latestLog.lastMealTime) : '—', color: '#ff6ef7' },
+    { label: 'Insulin Status', value: latestLog ? getInsulinStatus(latestLog.insulinTime) : '—', color: '#a97ff0' },
   ];
 
   if (!session) return null;
@@ -51,12 +51,19 @@ export default function Dashboard() {
 
       <main className="pt-20 pb-16 px-4 max-w-7xl mx-auto relative z-10">
         {/* Zone 1 — Risk Meter */}
-        <div className="text-center mb-8">
-          <RiskGauge score={riskScore} size={280} />
-          <p className="text-foreground/40 text-xs font-body mt-2">
+        <div className="text-center mb-10 flex flex-col items-center">
+          <div className="relative inline-block">
+            <div className="absolute inset-0 rounded-full blur-3xl opacity-20" style={{ background: 'radial-gradient(circle, #a97ff0 0%, transparent 70%)' }} />
+            <RiskGauge score={riskScore} size={300} />
+          </div>
+          <p className="text-foreground/40 text-xs font-body mt-3 tracking-widest uppercase">
             {latestLog ? 'Based on your last logged data' : 'No data logged yet'}
           </p>
-          <button onClick={() => setLogModalOpen(true)} className="btn-primary-glow px-6 py-2 rounded-xl text-xs mt-3">
+          <button
+            onClick={() => setLogModalOpen(true)}
+            className="mt-4 px-8 py-2.5 rounded-full text-xs font-heading uppercase tracking-widest text-black font-bold transition-all duration-200 hover:scale-105 hover:shadow-lg"
+            style={{ background: 'linear-gradient(135deg, #00ffcc, #a97ff0)', boxShadow: '0 0 24px #a97ff055' }}
+          >
             Update My Status
           </button>
         </div>
@@ -64,12 +71,16 @@ export default function Dashboard() {
         {/* Zone 2 — Metric Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {metricCards.map((m, i) => (
-            <GlassTiltCard key={i} className="text-center">
+            <GlassTiltCard key={i} className="text-center group transition-all duration-300 hover:scale-[1.03]"
+              style={{ borderTop: `2px solid ${m.color}22`, background: 'rgba(123,76,224,0.12)' }}>
+              <div className="w-8 h-8 rounded-full mx-auto mb-3 flex items-center justify-center"
+                style={{ background: `${m.color}18`, border: `1px solid ${m.color}44` }}>
+                <div className="w-2 h-2 rounded-full" style={{ background: m.color, boxShadow: `0 0 6px ${m.color}` }} />
+              </div>
               <p className="text-foreground/40 text-[10px] font-heading uppercase tracking-wider mb-2">{m.label}</p>
-              <p className="text-2xl font-heading font-bold" style={{ color: m.color }}>{m.value}</p>
-              {/* Mini sparkline */}
-              <svg width="60" height="20" className="mx-auto mt-2 opacity-30">
-                <polyline points="0,15 10,10 20,12 30,5 40,8 50,3 60,7" fill="none" stroke={m.color} strokeWidth="1.5" />
+              <p className="text-2xl font-heading font-bold" style={{ color: m.color, textShadow: `0 0 12px ${m.color}66` }}>{m.value}</p>
+              <svg width="60" height="20" className="mx-auto mt-2 opacity-40">
+                <polyline points="0,15 10,10 20,12 30,5 40,8 50,3 60,7" fill="none" stroke={m.color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </GlassTiltCard>
           ))}
@@ -102,15 +113,18 @@ export default function Dashboard() {
                   plugins: {
                     legend: { display: false },
                     tooltip: {
-                      backgroundColor: 'rgba(2,11,24,0.95)',
+                      backgroundColor: 'rgba(60,28,140,0.97)',
+                      borderColor: 'rgba(169,127,240,0.3)',
+                      borderWidth: 1,
                       titleFont: { family: 'Orbitron', size: 10 },
                       bodyFont: { family: 'DM Sans', size: 11 },
+                      padding: 12,
                       callbacks: { afterBody: () => riskScore > 50 ? ['⚠ Elevated risk — insulin may still be active'] : ['✓ Glucose trajectory looks stable'] },
                     },
                   },
                   scales: {
-                    x: { ticks: { color: 'rgba(255,255,255,0.3)', font: { family: 'DM Sans', size: 8 }, maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.03)' } },
-                    y: { min: 40, max: 180, ticks: { color: 'rgba(255,255,255,0.3)', font: { family: 'DM Sans', size: 9 } }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                    x: { ticks: { color: 'rgba(169,127,240,0.5)', font: { family: 'DM Sans', size: 8 }, maxTicksLimit: 8 }, grid: { color: 'rgba(123,76,224,0.08)' } },
+                    y: { min: 40, max: 180, ticks: { color: 'rgba(169,127,240,0.5)', font: { family: 'DM Sans', size: 9 } }, grid: { color: 'rgba(123,76,224,0.12)' } },
                   },
                 }}
               />
@@ -150,23 +164,37 @@ export default function Dashboard() {
 
 function InsightCardComponent({ insight }: { insight: { severity: string; text: string; explanation: string; action: string } }) {
   const [expanded, setExpanded] = useState(false);
-  const colorMap: Record<string, string> = { safe: '#06D6A0', caution: '#FFB703', high: '#ff8c00', critical: '#E63946' };
-  const color = colorMap[insight.severity] || '#00F5D4';
+  const colorMap: Record<string, string> = { safe: '#00ffcc', caution: '#FFB703', high: '#ff8c00', critical: '#E63946' };
+  const color = colorMap[insight.severity] || '#a97ff0';
 
   return (
-    <div className="glass-card p-3 text-sm">
+    <div
+      className="p-3 text-sm rounded-xl transition-all duration-200 hover:scale-[1.01]"
+      style={{
+        background: 'rgba(123,76,224,0.15)',
+        border: `1px solid ${color}28`,
+        borderLeft: `3px solid ${color}`,
+      }}
+    >
       <div className="flex items-start gap-2">
-        <span className="w-2 h-2 rounded-full mt-1.5 shrink-0" style={{ background: color, boxShadow: `0 0 6px ${color}` }} />
+        <span
+          className="w-2 h-2 rounded-full mt-1.5 shrink-0 animate-pulse"
+          style={{ background: color, boxShadow: `0 0 8px ${color}` }}
+        />
         <div className="flex-1">
-          <p className="text-foreground/80 font-body text-xs">{insight.text}</p>
+          <p className="text-foreground/85 font-body text-xs leading-relaxed">{insight.text}</p>
           {expanded && (
-            <div className="mt-2 text-[11px] text-foreground/50 font-body space-y-1">
+            <div className="mt-2 text-[11px] text-foreground/50 font-body space-y-1 border-t border-white/5 pt-2">
               <p>{insight.explanation}</p>
-              <p className="text-primary">→ {insight.action}</p>
+              <p style={{ color }} className="font-semibold">→ {insight.action}</p>
             </div>
           )}
-          <button onClick={() => setExpanded(!expanded)} className="text-[10px] text-primary mt-1 hover:underline font-body">
-            {expanded ? 'Show less' : 'Learn More'}
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="text-[10px] mt-1.5 hover:underline font-body"
+            style={{ color }}
+          >
+            {expanded ? 'Show less ↑' : 'Learn more ↓'}
           </button>
         </div>
       </div>
