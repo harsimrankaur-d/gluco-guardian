@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { saveUser, loginUser, getSession } from "@/lib/glucosense";
+import { supabase } from "@/lib/supabase";
 import { useEffect } from "react";
 
 // ── Types ──────────────────────────────────────────────────────────────────
@@ -62,9 +63,25 @@ export default function AuthPage() {
     setStep(3);
   };
 
-  const handleFinalSubmit = () => {
+  const handleFinalSubmit = async () => {
     setError('');
     const medicationList = onMedication ? medications.filter(m => m.name.trim()) : [];
+
+    // 1. Register with Supabase — this triggers the welcome email automatically
+    const { error: signUpError } = await supabase.auth.signUp({
+      email: form.email,
+      password: form.password,
+      options: {
+        data: { full_name: form.fullName },
+      },
+    });
+
+    if (signUpError) {
+      setError(signUpError.message);
+      return;
+    }
+
+    // 2. Save to localStorage as before so rest of app still works
     saveUser({
       ...form,
       age: parseInt(profileData.age),
@@ -461,7 +478,10 @@ export default function AuthPage() {
             </div>
 
             {/* ── Final Submit ───────────────────────────────────────────── */}
-            <button onClick={handleFinalSubmit} className="btn-primary-glow w-full py-3 rounded-xl text-sm">
+            <button
+              onClick={handleFinalSubmit}
+              className="btn-primary-glow w-full py-3 rounded-xl text-sm"
+            >
               Let's Go 🚀
             </button>
             <button onClick={() => { setStep(2); setError(''); }}
