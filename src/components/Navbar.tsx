@@ -9,8 +9,12 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const session = getSession();
+  const [session, setSession] = useState(getSession());
   const latestLog = getLatestLog();
+
+  useEffect(() => {
+    setSession(getSession());
+  }, [location.pathname]);
 
   const initials = session?.fullName?.split(' ').map(n => n[0]).join('').toUpperCase() || '?';
   const [scrolled, setScrolled] = useState(false);
