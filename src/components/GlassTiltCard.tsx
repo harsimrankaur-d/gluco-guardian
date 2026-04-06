@@ -6,7 +6,7 @@ interface Props {
   style?: React.CSSProperties;
 }
 
-export default function GlassTiltCard({ children, className = "" }: Props) {
+export default function GlassTiltCard({ children, className = "", style }: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = (e: MouseEvent) => {
